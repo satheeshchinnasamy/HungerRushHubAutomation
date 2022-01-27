@@ -9,6 +9,7 @@ import com.hub.annotations.FrameworkAnnotations;
 import com.hub.pages.HubHomePage;
 import com.hub.pages.HubLoginPage;
 import com.hub.pages.HubManagePage;
+import com.hub.pages.ManageCouponPage;
 import com.hub.reports.ExtentManager;
 
 /**
@@ -18,19 +19,40 @@ import com.hub.reports.ExtentManager;
  * @author satheesh.c
  * @Version 1.0
  */
+
 public class HUBManageCouponTests extends BaseTest {
+	HubLoginPage loginpage=new HubLoginPage();
+	HubHomePage homepage= new HubHomePage();
+	HubManagePage managepage=new HubManagePage();
+	ManageCouponPage couponpage=new ManageCouponPage();
 
 	@FrameworkAnnotations(author = { "Satheesh" }, category = { "Smoke", "Regression" })
 	@Test
 	public void couponsPageTitle(Map<String, String> data) {
-		
-		HubLoginPage loginpage=new HubLoginPage();
-		HubHomePage homepage= new HubHomePage();
-		HubManagePage managepage=new HubManagePage();
 
-		loginpage.enterUserName("CompanyAdminXBOTest@hungerrush.com").enterPassword("Test@123").clickLoginButton();
-		String coupontitle=homepage.hambergerMenuClicking().clickingManageOptions("Coupon").getPageTitle();
+		loginpage.enterUserName("CompanyAdminXBOTest@hungerrush.com")
+		.enterPassword("Test@123")
+		.clickLoginButton();
+		String coupontitle=homepage.hambergerMenuClicking()
+				.clickingManageOptions("Coupon")
+				.getPageTitle();
 		Assertions.assertThat(coupontitle).isEqualTo("HungerRush HUB | Coupon Management");
+
+	}
+
+	@FrameworkAnnotations(author = { "Satheesh" }, category = { "Smoke", "Regression" })
+	@Test
+	public void addCoupon(Map<String, String> data) throws InterruptedException {
+		loginpage.login("satheesh.c@hungerrush.com", "Rush@12");
+		String successmessage=homepage.hambergerMenuClicking().clickingManageOptions("Coupon")
+				.selectStore("DevOps")
+				.clickAddCouponBtn()
+				.createNewCoupon()
+				.getSuccessMessage();
+		Assertions.assertThat(successmessage).isEqualTo("Coupon added successfully!");
+		couponpage.closeToaster();
+		String coupon=couponpage.getCouponName();
+		Assertions.assertThat(coupon).isEqualTo("AutomationTestCoupon");
 
 	}
 }

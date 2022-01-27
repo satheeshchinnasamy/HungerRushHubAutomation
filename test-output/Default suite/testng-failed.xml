@@ -7,7 +7,7 @@
         <methods>
           <include name="tearDown"/>
           <include name="setUp"/>
-          <include name="couponsPageTitle"/>
+          <include name="addCoupon"/>
         </methods>
       </class> <!-- com.hub.testcases.HUBManageCouponTests -->
     </classes>

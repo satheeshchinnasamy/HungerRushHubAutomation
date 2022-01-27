@@ -2,6 +2,7 @@ package com.hub.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import com.hub.driver.DriverManager;
 import com.hub.enums.WaitStrategy;
@@ -16,6 +17,8 @@ import com.hub.reports.ExtentLogger;
  */
 public class BasePage {
 	
+	
+	private final By popupclosebtn=By.xpath("//button[@title='close']");
 	/**
 	 *
 	 * <P>Method is to click the element</P>
@@ -54,9 +57,46 @@ public class BasePage {
 		}
 	}
 
+	protected void selectOptions(By by, WaitStrategy waitstrategy,String dropdowntext) {
+		
+		WebElement element=ExplicitWaitFactory.performExplicitWait(waitstrategy, by);
+		Select select=new Select(element);
+		select.selectByVisibleText(dropdowntext);
+		try {
+			ExtentLogger.pass(dropdowntext+ " is selected successfully", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	protected String pageTitle() {
 		return DriverManager.getDriver().getTitle();
 	}
 	
+	protected String getToasterMessage(By by, WaitStrategy waitstrategy) {
+		WebElement element=ExplicitWaitFactory.performExplicitWait(waitstrategy, by);
+		String toaster=element.getText();
+		try {
+			ExtentLogger.pass(toaster+ " Messsage got displayed", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toaster;
+		
+	}
 	
+	protected String getElementTex(By by, WaitStrategy waitstrategy) {
+		WebElement element=ExplicitWaitFactory.performExplicitWait(waitstrategy, by);
+		String text=element.getText();
+		try {
+			ExtentLogger.pass(text+ " is appeared in the UI", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return text;
+	}
+	
+	protected void popupclose(WaitStrategy waitstrategy) {
+		WebElement element=ExplicitWaitFactory.performExplicitWait(waitstrategy, popupclosebtn);
+		element.click();
+	}
 }
